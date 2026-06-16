@@ -2,9 +2,9 @@
 inclusion: always
 ---
 
-# Product: MentorMatch
+# Product: MENToBe
 
-MentorMatch is a Tinder-style mentorship matching platform that connects students and early-career graduates (mentees, ages 18–28) with experienced professionals (mentors, ages 30–55). It is a digital-only product delivered as a mobile app (iOS 14+ / Android 10+) with a companion web experience.
+MENToBe is a Tinder-style mentorship matching platform that connects students and early-career graduates (mentees, ages 18–28) with experienced professionals (mentors, ages 30–55). It is a digital-only product delivered as a mobile app (iOS 14+ / Android 10+) with a companion web experience.
 
 ## Core problem
 

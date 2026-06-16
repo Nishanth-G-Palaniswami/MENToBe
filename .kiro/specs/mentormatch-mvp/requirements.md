@@ -1,10 +1,10 @@
 # Requirements Document
 
-# MentorMatch MVP — Requirements
+# MENToBe MVP — Requirements
 
 ## Introduction
 
-MentorMatch is a Tinder-style mentorship matching platform that pairs mentees (students and early-career grads) with mentors (mid-to-senior professionals). The MVP delivers a mobile-first web experience covering auth, profile setup, swipe-based discovery, messaging, AI meeting notes, and basic plan management. Source spec: Miro board "Finder" (https://miro.com/app/board/uXjVHEi3EjE=/).
+MENToBe is a Tinder-style mentorship matching platform that pairs mentees (students and early-career grads) with mentors (mid-to-senior professionals). The MVP delivers a mobile-first web experience covering auth, profile setup, swipe-based discovery, messaging, AI meeting notes, and basic plan management. Source spec: Miro board "Finder" (https://miro.com/app/board/uXjVHEi3EjE=/).
 
 ## Glossary
 

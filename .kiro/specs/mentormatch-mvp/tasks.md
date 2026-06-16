@@ -1,4 +1,4 @@
-# Implementation Plan: MentorMatch MVP
+# Implementation Plan: MENToBe MVP
 
 ## Overview
 
@@ -162,14 +162,14 @@ The app is mock-first. Every backend dependency lives behind a TypeScript interf
     - Add `src/screens/Chat/ReengagementBanner.tsx` surfaced when `useMessageThread().isSilent` is true (14 days idle).
     - _Requirements: 5.4, 5.5, 7.4_
 
-- [-] 15. Build Meeting Notes screens
+- [ ] 15. Build Meeting Notes screens
   - Add `src/screens/MeetingNotes/NotesListScreen.tsx` showing a chronological list with date, duration, and summary preview, sourced from `useMeetingNotes`.
   - Add `src/screens/MeetingNotes/NoteDetailScreen.tsx` rendering all four sections (`Discussion Summary`, `Action Items`, `Next Meeting Goals`, `Shared Resources`).
   - Add `src/screens/MeetingNotes/ManualNoteEntry.tsx` editor used when `note.status === "failed"`. Saving calls `useMeetingNotes().saveManual`.
   - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5_
 
 - [x] 16. Build Profile, Availability, and Plan screens _(Profile delivered via `src/demo/screens/ProfileScreen.tsx` with upgrade CTA; availability + plan deeper screens skipped for MVP demo)_
-  - [-] 16.1 Profile read and edit
+  - [x] 16.1 Profile read and edit
     - Add `src/screens/Profile/ProfileScreen.tsx` (read view: skills, career interests, learning style, languages, plan tier).
     - Add `src/screens/Profile/ProfileEditScreen.tsx` form using `useProfile().update`. On save, the candidate queue is invalidated (re-score).
     - _Requirements: 7.1, 7.2_

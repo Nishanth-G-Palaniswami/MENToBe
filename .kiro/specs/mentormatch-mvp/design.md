@@ -1,8 +1,8 @@
-# MentorMatch MVP — Design
+# MENToBe MVP — Design
 
 ## Overview
 
-MentorMatch MVP is a mobile-first web application that matches mentees with mentors using a Tinder-style swipe flow, then unlocks messaging and AI-generated meeting notes once both sides express interest. The product is delivered as a single-page React 18 + TypeScript app (Vite-built, Tailwind-styled) so we can iterate on the prototype flows from the Miro board "Finder" without paying the native toolchain tax. Once flows stabilize we can wrap with Capacitor or port to React Native.
+MENToBe MVP is a mobile-first web application that matches mentees with mentors using a Tinder-style swipe flow, then unlocks messaging and AI-generated meeting notes once both sides express interest. The product is delivered as a single-page React 18 + TypeScript app (Vite-built, Tailwind-styled) so we can iterate on the prototype flows from the Miro board "Finder" without paying the native toolchain tax. Once flows stabilize we can wrap with Capacitor or port to React Native.
 
 The MVP is shipped **mock-first**. Every backend dependency — auth provider, matching algorithm, messaging transport, AI notes generator, calendar sync — sits behind a small TypeScript interface in `src/features/<domain>/` with an in-memory mock implementation. Wiring the real backend (Node + Fastify, Postgres, Redis, S3, OpenAI) means swapping the adapter, not rewriting screens.
 

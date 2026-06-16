@@ -26,7 +26,7 @@ export function AuthScreen() {
   return (
     <div className="mx-auto flex min-h-full max-w-md flex-col justify-center px-6 py-12">
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold text-primary">MentorMatch</h1>
+        <h1 className="text-3xl font-bold text-primary">MENToBe</h1>
         <p className="mt-2 text-sm text-slate-600">
           Find the right mentor — or mentee — and grow together.
         </p>
