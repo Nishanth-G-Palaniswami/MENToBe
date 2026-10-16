@@ -1,22 +1,24 @@
 # MENToBe
 
-A Tinder-style mentorship matching platform. Mentees swipe through curated mentor profiles, mentors triage incoming interest, and mutual matches unlock messaging plus AI-generated meeting notes.
+**Live demo:** [men-to-be.vercel.app](https://men-to-be.vercel.app)
 
-> 76% of professionals say mentors matter; only 37% have one. LinkedIn cold outreach lands a 2–5% reply rate. MENToBe applies dating-app efficiency to career-specific matching: skills, teaching styles, availability, languages, and values are all weighted by an AI matching algorithm.
+A Tinder-style mentorship matching platform. Mentees swipe through curated mentor profiles, mentors triage incoming interest, and mutual matches unlock messaging plus AI-generated meeting notes. Skills, teaching styles, availability, languages, and values are weighted by a matching algorithm into a 0 to 100 score.
 
 ## Status
 
-MVP — clickable web prototype, **mock-first**. Every backend dependency (auth, matching, messaging, notes, calendar, plan) sits behind a small TypeScript interface in `src/features/<domain>/service.ts` with an in-memory mock under `mock.ts`. Wiring a real backend later means swapping a factory in `App.tsx` — not rewriting screens.
+MVP (Minimum Viable Product): a clickable web prototype, **mock-first**. Every backend dependency (auth, matching, messaging, notes, calendar, plan) sits behind a small TypeScript interface in `src/features/<domain>/service.ts` with an in-memory mock under `mock.ts`. Wiring a real backend later means swapping a factory in `App.tsx`, not rewriting screens.
 
-The current build mounts a clickable demo (`src/demo/`) covering: auth → role select → onboarding (profile fields) → discover (swipe) → candidate detail → matches → chat → profile.
+The current build mounts a clickable demo (`src/demo/`) covering: auth, role select, onboarding (profile fields), discover (swipe), candidate detail, matches, chat, profile. Meeting-note generation and the plan tier logic are implemented against the mock services; nothing calls a real model or payment provider yet.
 
 ## Quick start
 
 Requires Node 18+ and npm.
 
 ```bash
+git clone https://github.com/Nishanth-G-Palaniswami/MENToBe.git
+cd MENToBe
 npm install
-npm run dev      # start Vite dev server (http://localhost:5173)
+npm run dev      # Vite dev server at http://localhost:5173
 ```
 
 Other scripts:
@@ -42,8 +44,6 @@ npm run lint     # ESLint over the workspace
 | Lint / format        | ESLint + Prettier                                            |
 | Backend (deferred)   | Node + Fastify, Postgres, Redis, S3, OpenAI                  |
 
-Brand: primary violet `#7C3AED`, accent pink `#EC4899`.
-
 ## Features
 
 **Authentication and role selection**
@@ -54,21 +54,22 @@ Brand: primary violet `#7C3AED`, accent pink `#EC4899`.
 - Mentee: subjects, career interests, background, languages, meeting frequency, preferred teaching styles, values
 - Mentor: teaching style, areas to teach, experience, industries, availability windows, languages, values, supported backgrounds, verification status (with a "Verified Mentor" badge)
 
-**AI matching and Discover**
-- Curated swipe queue ordered by an integer 0–100 match score
+**Matching and Discover**
+- Curated swipe queue ordered by an integer 0 to 100 match score
 - Five weighted components: skills (40%), teaching style (15%), availability (15%), languages (15%), values (15%)
 - Stable tiebreak by user id
 - Right-swipe records interest, left-swipe records a pass; mutual interest creates a match
 
 **Messaging**
 - Match unlocks a 1:1 thread with optimistic send and live updates
-- AI conversation prompts seed empty threads
+- Conversation prompts seed empty threads
 - Scheduling card and 14-day re-engagement banner (the latter wired through `isWindowSilent`)
-- Validates outgoing bodies via `MessageBodySchema` (trimmed, non-empty, ≤ 4000 chars)
+- Validates outgoing bodies via `MessageBodySchema` (trimmed, non-empty, at most 4000 chars)
 
-**AI meeting notes**
+**Meeting notes**
 - Four-section template: Discussion Summary, Action Items, Next Meeting Goals, Shared Resources
 - Manual fallback when generation fails, with a single 30s background retry
+- Generation is mocked today; the interface is where an LLM call would go
 
 **Plans**
 - Free (3 active connections), Mentee Premium ($9.99/mo, unlimited), Mentor Pro ($4.99/mo, unlimited)
@@ -76,7 +77,7 @@ Brand: primary violet `#7C3AED`, accent pink `#EC4899`.
 
 ## Architecture
 
-Layered: presentation → application → domain → services.
+Layered: presentation, application, domain, services.
 
 ```
 Screens (src/screens, src/demo/screens)
@@ -86,8 +87,8 @@ Screens (src/screens, src/demo/screens)
         └─ TanStack Query cache
         └─ Pure domain logic (src/features/*)
               └─ Service interfaces (src/features/*/service.ts)
-                    ├─ In-memory mocks (src/features/*/mock.ts)   ← today
-                    └─ HTTP adapters                              ← future
+                    ├─ In-memory mocks (src/features/*/mock.ts)   today
+                    └─ HTTP adapters                              future
 ```
 
 Key choices:
@@ -108,57 +109,21 @@ Key choices:
 src/
   main.tsx                  # Vite entry
   App.tsx                   # mounts the clickable demo for now
-  demo/                     # clickable prototype (auth → discover → chat → profile)
-    DemoApp.tsx, DemoProvider.tsx, data.ts
-    screens/
-
+  demo/                     # clickable prototype (auth, discover, chat, profile)
   screens/                  # spec-aligned screens (see roadmap below)
-    Auth/, Onboarding/, Discover/, Matches/, Chat/, MeetingNotes/, Profile/
-
-  components/               # cross-screen UI primitives (Button, Card, Sheet, Avatar, Badge, Tag,
-                            # FormField, Stepper, EmptyState, SwipeCard, MatchBadge)
-
-  features/
-    auth/, matching/, messaging/, notes/, profile/, calendar/, plan/
-                            # each: service.ts (interface), mock.ts (in-memory adapter)
+  components/               # cross-screen UI primitives
+  features/                 # per-domain service.ts (interface) + mock.ts (in-memory adapter)
     matching/scoreMatch.ts  # pure scoring fn
     matching/orderQueue.ts  # pure queue ordering
-    matching/matchPolicy.ts # pure cap policy (mutual interest + active-connection caps)
+    matching/matchPolicy.ts # pure cap policy
     profile/schemas.ts      # zod schemas for onboarding + message body
-    serviceProvider.tsx     # <ServiceProvider> + useServices()
-
   hooks/                    # useAuth, useProfile, usePlan, useMessageThread, useMeetingNotes
-  lib/                      # framework-agnostic utilities
-    time.ts, id.ts, storage.ts
-    stores/sessionStore.ts, stores/onboardingStore.ts (persisted via zustand/middleware)
-
+  lib/                      # time.ts, id.ts, storage.ts, stores/
   types/                    # shared TypeScript domain types
   styles/                   # Tailwind base + tokens
 ```
 
-## Brand
-
-| Token        | Value      |
-| ------------ | ---------- |
-| Primary      | `#7C3AED`  |
-| Accent       | `#EC4899`  |
-| Theme color  | `#7C3AED`  |
-| Font stack   | Inter, ui-sans-serif, system-ui |
-
-Tailwind v3 config (`tailwind.config.ts`) ships full 50–900 ramps for both `primary` and `accent`.
-
-## Conventions
-
-- TypeScript strict mode on; no `any` without justification.
-- One component per file, named export. PascalCase for components, camelCase for utilities.
-- `function` declarations for components, `const` arrow functions for hooks/utils.
-- Co-locate component-specific styles; reach for Tailwind utilities before custom CSS.
-- Domain types live in `src/types/`. Reuse them; do not redeclare DTOs at each call site.
-- Prefer pure functions over class hierarchies for matching logic — easier to test, easier to swap.
-
 ## Roadmap
-
-The MVP demo is wired through `src/demo/`. Spec-aligned work in `src/screens/` continues alongside.
 
 **Done**
 - Vite + React + TS + Tailwind shell (strict mode, brand tokens)
@@ -168,27 +133,21 @@ The MVP demo is wired through `src/demo/`. Spec-aligned work in `src/screens/` c
 - Zustand stores: in-memory session + persisted onboarding draft
 - UI primitives (11 components)
 - Hooks: `useAuth`, `useProfile`, `usePlan`, `useMessageThread`, `useMeetingNotes`
-- Clickable demo: Auth → RoleSelect → Onboarding (role-specific profile fields) → Discover (swipe + score badge) → CandidateDetail → Matches → Chat → Profile, with auth/role/onboarding gates + bottom nav
-- Demo onboarding captures real profile fields (subjects/areas, interests, years of experience, teaching/learning style, meeting frequency, languages, values) that feed the match scorer and render on the Profile screen
+- Clickable demo end to end with auth/role/onboarding gates and bottom nav
+- Demo onboarding captures real profile fields that feed the match scorer and render on the Profile screen
 
 **Deferred**
-- Spec-aligned onboarding wizards in `src/screens/Onboarding/` (the demo onboarding in `src/demo/` covers the runtime path today)
-- Meeting Notes screens (hook + demo provider actions are built; screens not yet)
+- Spec-aligned onboarding wizards in `src/screens/Onboarding/`
+- Meeting Notes screens (hook and demo provider actions are built; screens are not)
 - Availability + Google Calendar sync screen
 - Plan management deep view (upgrade CTA already wired in demo Profile)
-- Spec-aligned routing + auth/role/profile gates (demo router covers the runtime path today)
+- Spec-aligned routing + auth/role/profile gates
 - Cross-cutting: analytics helper, lazy-load perf, fuller token clearing
 
-## Spec source of truth
+## Contributing
 
-The active spec is at `.kiro/specs/mentormatch-mvp/`:
-
-- `requirements.md` — EARS acceptance criteria
-- `design.md` — architecture, components, data models, sequence diagrams
-- `tasks.md` — implementation plan with dependency graph
-
-Steering files (`.kiro/steering/*.md`) carry product, tech, and structure conventions. The original prototype lives on the Miro board "Finder" linked from `.kiro/steering/miro-board.md`.
+Conventions, brand tokens, and the spec source of truth are in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-Private prototype. No license granted.
+Private prototype. No license granted; all rights reserved. The repository is public so the code can be read and the demo evaluated, not reused.
